@@ -97,7 +97,7 @@ public class Pesquisar  {
         dadosTable.addAll( car );
 
         btnProximo.setDisable( car.size() < 15 ); // Verdade? Desabilita!
-        btnAnterior.setDisable( offSet <= 0); //Como disse antes, menor por precaução
+        btnAnterior.setDisable( offSet <= 0); //Menor por precaução
     }
 
     public Pane telaPesquisar( BorderPane telaPrincipal ) {
