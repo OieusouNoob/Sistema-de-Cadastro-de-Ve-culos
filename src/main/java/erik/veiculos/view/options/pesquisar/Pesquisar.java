@@ -156,7 +156,7 @@ public class Pesquisar  {
         btnAnterior.setDisable( offSet <= 0 );
         //Vamos desabilitar o botão de 'voltar' caso o utilizador tenha apenas, ou esteja, na primeira página
 
-        //Pegando o momento da seleção de alguma linha, para permitimos o botão aparecer
+       
 
         btnBuscar.setOnAction( buscar -> {
 
@@ -180,6 +180,13 @@ public class Pesquisar  {
             if ( selecionado != null ){
 
                 Boolean isUnico = JavaFXUI.donoUnico( caixaSuspensaUnicoDono );
+                //Acima optei pelo Boolean com não primitivo por causa da opção a mais que ele me da, o null.
+                /*
+                isUnico pode ser 3 coisas agora:
+                1 - true - Sim
+                2 - false - Não
+                3 - null = Ambos
+                */
 
                 try {
                     List<Veiculo> filtrados = VeiculoController.buscarComFiltro(selecionado.getValue(), campoBusca.getText(), isUnico, offSet);
@@ -226,10 +233,10 @@ public class Pesquisar  {
 
         btnSalvar.setOnAction(salvar -> {
                 try{
-                    telaPrincipal.setCenter(  new Salvar().getFormularioSalvar( telaPrincipal,null ) );
+                    telaPrincipal.setCenter(  new Salvar().getFormularioSalvar( telaPrincipal, null ) );
                     offSet = 0;
                     //Zeramos o offSet para que todas vezes que atualizamos a tela, ela não de erros como
-                    // botões ativos estando no limite já
+                    // botões ativos estando no limite já permitindo o utilizador clicar, não vai atualizar, mas vai mostrar que é possível clicar
                     atualizarTabela( dadosTable );
                 }catch (RuntimeException e){
                     JavaFXUI.Alertas( Alert.AlertType.ERROR, "Falha na Tela", e.getMessage() );
