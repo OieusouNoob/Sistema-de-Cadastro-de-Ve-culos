@@ -187,6 +187,13 @@ public class Pesquisar  {
             if ( selecionado != null ){
 
                 Boolean isUnico = JavaFXUI.donoUnico( caixaSuspensaUnicoDono );
+                //Acima optei pelo Boolean como não primitivo(Classe) devido opção a mais que ele me permite ter a mais, o null.
+                /*
+                isUnico pode ser 3 coisas agora:
+                1 - true - Sim
+                2 - false - Não
+                3 - null = Ambos
+                */
 
                 try {
                     List<Veiculo> filtrados = VeiculoController.buscarComFiltro(selecionado.getValue(), campoBusca.getText(), isUnico, offSet);
@@ -233,10 +240,10 @@ public class Pesquisar  {
 
         btnSalvarNovo.setOnAction(salvar -> {
                 try{
-                    telaPrincipal.setCenter(  new Salvar().getFormularioSalvar( telaPrincipal,null ) );
+                    telaPrincipal.setCenter(  new Salvar().getFormularioSalvar( telaPrincipal, null ) );
                     offSet = 0;
-                    //Zeramos o offSet para que todas vezes que atualizamos a tela, ela não de erros como
-                    // botões ativos estando no limite já
+                    // Zeramos o offSet para que todas vezes que atualizamos a tela, ela não de erros como
+                    // botões ativos estando no limite já permitindo o utilizador clicar, não vai atualizar, mas vai mostrar que é possível clicar
                     atualizarTabela( dadosTable );
                 }catch (RuntimeException e){
                     JavaFXUI.Alertas( Alert.AlertType.ERROR, "Falha na Tela", e.getMessage() );

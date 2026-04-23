@@ -122,13 +122,10 @@ public class VeiculoRepository {
                 tipoSelect.append("AND unicodono = ? ");
             }
 
-            if( coluna.equals( "id" ) ) {
-                tipoSelect.append("ORDER BY id ASC LIMIT 15 OFFSET ?");
+            if( coluna.equals( "ano" ) ) {
+               tipoSelect.append("ORDER BY ano ASC LIMIT 15 OFFSET ?");
 
-            }else if( coluna.equals( "ano" )){
-                tipoSelect.append("ORDER BY ano ASC LIMIT 15 OFFSET ?");
-
-            }else{
+            }else {
                 tipoSelect.append("ORDER BY id ASC LIMIT 15 OFFSET ?");
 
             }
@@ -141,7 +138,7 @@ public class VeiculoRepository {
                 throw new RuntimeException("Falha interna: Erro ao tentar montar uma pesquisa!");
             }
 
-            int index = 1;
+            int index = 1; //Antes eu fazai tudo na mão, usando uma variável como contadora foi bem mais simples
 
             if (temTextoNaBusca) {
                 if (ehTexto) {
@@ -151,14 +148,14 @@ public class VeiculoRepository {
                 }
             }
 
-            if (unicoDono != null) {
+            if (unicoDono != null) { // Eu tenho que pensar em como fazer isso melhor, verifiquei duas vezes isso...
                 p.setBoolean(index++, unicoDono);
             }
 
             // O offset é sempre o último!
             p.setInt(index, offSet);
 
-            System.out.println("Query Executada: " + p);
+            System.out.println("Query Executada: " + p); // Apenas para ver no terminal. Isso pode ser um comentário
 
             List<Veiculo> car = new ArrayList<>();
             try (ResultSet resultadoFiltro = p.executeQuery()) {
@@ -173,6 +170,8 @@ public class VeiculoRepository {
                     tempCar.setPlaca(resultadoFiltro.getString("placa"));
                     tempCar.setUnicoDono(resultadoFiltro.getBoolean("unicodono"));
                     car.add(tempCar);
+                    /*Se ocorrer um BufferOverFlow aqui é erro do desenvolvedor.
+                    Talvez eu mesmo errei e ainda não encontrei erro, haha.*/
                 }
             }catch(SQLException e){
                 throw new RuntimeException("Falha interna: Erro ao executar pesquisa");
@@ -191,7 +190,7 @@ public class VeiculoRepository {
 
         try( Connection conn = ConexaoBancoDados.conexao() ){
             PreparedStatement preparar = conn.prepareStatement( UPT );
-
+            //Veja depois eu adiciono uma variável contadora aqui também
             preparar.setString( 1, car.getNome() );
             preparar.setString( 2, car.getCor() );
             preparar.setInt( 3, car.getAno() );
@@ -213,7 +212,8 @@ public class VeiculoRepository {
     }
 
     public static boolean delete( int id ){
-        if( id <= 0){
+       
+        if( id <= 0){ // Nunca se sabe o que se passa na mente de um progamador(a) de madrugada
             throw new RuntimeException("Falha interna: Erro ao tentar excluir um veículo");
         }
 
