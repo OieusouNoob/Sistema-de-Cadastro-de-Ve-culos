@@ -13,6 +13,7 @@ import javafx.geometry.Pos;
 
 import javafx.scene.control.*;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.Priority;
 
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
@@ -38,7 +39,7 @@ public class Pesquisar  {
 
     private final Button btnAlterar;
     private final Button btnExcluir;
-    private final Button btnSalvar;
+    private final Button btnSalvarNovo;
     private final Button btnBuscar;
     private final Button btnAnterior;
     private final Button btnProximo;
@@ -63,7 +64,7 @@ public class Pesquisar  {
 
         btnAlterar = new Button( "Alterar" );
         btnExcluir = new Button( " Excluir" );
-        btnSalvar = new Button("Salvar");
+        btnSalvarNovo = new Button("Salvar/Novo");
         btnBuscar = new Button("Buscar");
         btnAnterior = new Button("Anterior");
         btnProximo = new Button("Próximo");
@@ -97,7 +98,7 @@ public class Pesquisar  {
         dadosTable.addAll( car );
 
         btnProximo.setDisable( car.size() < 15 ); // Verdade? Desabilita!
-        btnAnterior.setDisable( offSet <= 0); //Como disse antes, menor por precaução
+        btnAnterior.setDisable( offSet <= 0); //Menor por precaução
     }
 
     public Pane telaPesquisar( BorderPane telaPrincipal ) {
@@ -117,6 +118,12 @@ public class Pesquisar  {
 
         TableView<Veiculo> tabelaVeiculo = new TableView<>();
 
+        //Para evitar erros de layout, por exemplo...
+        /*
+        * Fiz uns testes e notei que quando estava em tela cheia a tabela ficava cortada como se fosse ainda
+        * uma tela dividida em 1.5
+        * */
+        VBox.setVgrow( tabelaVeiculo, Priority.ALWAYS );
 
         tabelaVeiculo.getColumns().addAll(
                 colunaId,
@@ -146,17 +153,17 @@ public class Pesquisar  {
 
         dadosTable.addAll(carTemp);
 
-        HBox botoes = new HBox(35, btnAnterior, btnSalvar, btnAlterar, btnExcluir, btnProximo );
+        HBox botoes = new HBox(35, btnAnterior, btnSalvarNovo, btnAlterar, btnExcluir, btnProximo );
         botoes.setAlignment( Pos.BOTTOM_CENTER );
 
         //Vamos desativar os botões até que seja selecionado alguma linha na 'TableView'
-
+        //Pegando o momento da seleção de alguma linha, para permitimos o botão aparecer
         btnAlterar.disableProperty().bind( tabelaVeiculo.getSelectionModel().selectedItemProperty().isNull() );
         btnExcluir.disableProperty().bind( tabelaVeiculo.getSelectionModel().selectedItemProperty().isNull() );
         btnAnterior.setDisable( offSet <= 0 );
         //Vamos desabilitar o botão de 'voltar' caso o utilizador tenha apenas, ou esteja, na primeira página
 
-        //Pegando o momento da seleção de alguma linha, para permitimos o botão aparecer
+
 
         btnBuscar.setOnAction( buscar -> {
 
@@ -217,14 +224,14 @@ public class Pesquisar  {
                        dadosTable.remove(car);
                    }
 
-               }catch(Exception e){
+               }catch(RuntimeException e){
                    JavaFXUI.Alertas( Alert.AlertType.ERROR, "Error", e.getMessage() );
                }
            }
 
         });
 
-        btnSalvar.setOnAction(salvar -> {
+        btnSalvarNovo.setOnAction(salvar -> {
                 try{
                     telaPrincipal.setCenter(  new Salvar().getFormularioSalvar( telaPrincipal,null ) );
                     offSet = 0;

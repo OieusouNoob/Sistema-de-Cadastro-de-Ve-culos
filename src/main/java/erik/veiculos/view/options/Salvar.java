@@ -109,7 +109,7 @@ public class Salvar {
         if( car != null ){ // Atualizar os dados de um veículo
             campoNome.setText( car.getNome() );
             campoCor.setText( car.getCor() );
-            campoAno.setText( car.getAno() + "" );
+            campoAno.setText( car.getAno() + "" ); //Vai assim mesmo
             campoModelo.setText( car.getModelo() );
             campoChassi.setText( car.getNumeroChassi() );
             campoPlaca.setText( car.getPlaca() );

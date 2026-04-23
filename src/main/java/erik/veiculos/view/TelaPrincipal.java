@@ -24,7 +24,7 @@ public class TelaPrincipal extends Application {
         // Criação da tela
         BorderPane telaPrincipal = new BorderPane();
 
-        Scene cena = new Scene( new Pesquisar().telaPesquisar( telaPrincipal ), Utills.sizeScreen().width / 1.5f, Utills.sizeScreen().getHeight() / 1.5f);
+        Scene cena = new Scene( new Pesquisar().telaPesquisar( telaPrincipal ), Utills.sizeScreen().width  / 1.5f, Utills.sizeScreen().getHeight() / 1.5f );
         stage.setTitle("Sistema de Veículos");
         stage.setScene( cena );
         stage.show();
