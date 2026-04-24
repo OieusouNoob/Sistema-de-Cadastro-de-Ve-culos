@@ -1,6 +1,7 @@
 package erik.veiculos.models.repository;
 
 import erik.veiculos.models.Veiculo;
+import erik.veiculos.utills.Utills;
 
 import java.sql.*;
 
@@ -95,7 +96,7 @@ public class VeiculoRepository {
         }
     }
 
-    public static List<Veiculo> pesquisarFiltro(String coluna, String valorDigitado, Boolean unicoDono, Integer offSet) {
+    public static List<Veiculo> pesquisarFiltro(String coluna, String valorDigitado, Utills.FiltroDono unicoDono, Integer offSet) {
         if (offSet < 0) {
             throw new RuntimeException("Pulo inválido!");
         }
@@ -118,7 +119,7 @@ public class VeiculoRepository {
             }
 
             // 2. Se ele escolheu "Sim" ou "Não" no combo, adiciona o filtro de dono
-            if (unicoDono != null) {
+            if (unicoDono != Utills.FiltroDono.AMBOS) {
                 tipoSelect.append("AND unicodono = ? ");
             }
 
@@ -138,7 +139,7 @@ public class VeiculoRepository {
                 throw new RuntimeException("Falha interna: Erro ao tentar montar uma pesquisa!");
             }
 
-            int index = 1; //Antes eu fazai tudo na mão, usando uma variável como contadora foi bem mais simples
+            int index = 1; //Antes eu fazia tudo na mão, usando uma variável como contadora foi bem mais simples
 
             if (temTextoNaBusca) {
                 if (ehTexto) {
@@ -148,8 +149,10 @@ public class VeiculoRepository {
                 }
             }
 
-            if (unicoDono != null) { // Eu tenho que pensar em como fazer isso melhor, verifiquei duas vezes isso...
-                p.setBoolean(index++, unicoDono);
+            if( unicoDono == Utills.FiltroDono.SIM ){
+                p.setBoolean(index++, true);
+            }else if ( unicoDono == Utills.FiltroDono.NAO  ) {
+                p.setBoolean( index++, false );
             }
 
             // O offset é sempre o último!

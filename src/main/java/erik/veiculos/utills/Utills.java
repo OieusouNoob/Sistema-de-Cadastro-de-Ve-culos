@@ -12,6 +12,14 @@ public class Utills {
         throw new UnsupportedOperationException("Está classe não pode ser instanciada");
     }
 
+
+    public enum FiltroDono{
+        SIM,
+        NAO,
+        AMBOS
+    }
+
+
     public static boolean ehChassi(String chassi){
         if (chassi == null) {
             throw new IllegalArgumentException("Digite algo!");
@@ -46,8 +54,6 @@ public class Utills {
     public static Dimension sizeScreen() {
         return Toolkit.getDefaultToolkit().getScreenSize();
     } //Sei que não é a melhor forma, mas funciona
-
-
 
     public static boolean salvarArquivo( Veiculo car ){
         try (java.io.PrintWriter escrever = new java.io.PrintWriter( new java.io.FileWriter("veiculo.txt", true) )){

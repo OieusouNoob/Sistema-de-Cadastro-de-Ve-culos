@@ -58,7 +58,7 @@ public class VeiculoController {
         return VeiculoRepository.pesquisarGeral( offSet );
     }
 
-    public static List<Veiculo> buscarComFiltro( String coluna, String valorDigitado, Boolean unicoDono, int offSet ){
+    public static List<Veiculo> buscarComFiltro( String coluna, String valorDigitado, Utills.FiltroDono unicoDono, int offSet ){
         return VeiculoRepository.pesquisarFiltro( coluna, valorDigitado, unicoDono, offSet );
     }
 

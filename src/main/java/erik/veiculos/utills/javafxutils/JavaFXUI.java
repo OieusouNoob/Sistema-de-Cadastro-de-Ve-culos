@@ -1,5 +1,7 @@
 package erik.veiculos.utills.javafxutils;
 
+import erik.veiculos.utills.Utills;
+
 import javafx.scene.control.Alert;
 
 import javafx.scene.control.ButtonBar;
@@ -21,13 +23,8 @@ public class JavaFXUI {
         throw new IllegalArgumentException("Esta classe não pode ser instânciada!");
     }
 
+
     public static void Alertas(Alert.AlertType tipoDeAlert, String titulo, String conteudo ){
-
-        if( tipoDeAlert == Alert.AlertType.CONFIRMATION){
-            AlertaSimNao( titulo, conteudo );
-            return;
-        }
-
         Alert alerta = new Alert( tipoDeAlert );
         alerta.setTitle( titulo );
         alerta.setContentText( conteudo );
@@ -127,15 +124,15 @@ public class JavaFXUI {
         return barraSuspensa;
     }
 
-    public static Boolean donoUnico( ComboBox<String> caixaSuspensaUnicoDono ){
+    public static Integer donoUnico(ComboBox<String> caixaSuspensaUnicoDono ){
 
         if( caixaSuspensaUnicoDono.getValue().equals("Sim") ){
-            return true;
+            return Utills.FiltroDono.SIM.ordinal();
         }else if( caixaSuspensaUnicoDono.getValue().equals("Não")){
-            return false;
+            return Utills.FiltroDono.NAO.ordinal();
         }
 
-        return null;
+        return Utills.FiltroDono.AMBOS.ordinal();
 
     }
 }

@@ -3,6 +3,7 @@ package erik.veiculos.view.options.pesquisar;
 import erik.veiculos.controller.VeiculoController;
 import erik.veiculos.models.Veiculo;
 
+import erik.veiculos.utills.Utills;
 import erik.veiculos.utills.javafxutils.JavaFXUI;
 
 import erik.veiculos.view.options.Salvar;
@@ -20,6 +21,8 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.util.Pair;
+import javafx.util.StringConverter;
+
 
 import java.util.List;
 
@@ -47,7 +50,7 @@ public class Pesquisar  {
     private final TextField campoBusca;
 
     private final ComboBox<Pair<String, String>> caixaSuspensaFiltro = JavaFXUI.opcoesComboBox();
-    private final ComboBox<String> caixaSuspensaUnicoDono = new ComboBox<>();
+    private final ComboBox<Utills.FiltroDono> caixaSuspensaUnicoDono = new ComboBox<>();
 
     private int offSet = 0;
 
@@ -74,7 +77,25 @@ public class Pesquisar  {
         campoBusca.setPromptText("Pesquise algo");
 
         //Criamos uma caixa suspensa para o utilizador escolher se é único dono
-        caixaSuspensaUnicoDono.getItems().addAll( "Ambos", "Sim", "Não" );//Ambos ignora os tipos padrões do boolean
+        caixaSuspensaUnicoDono.getItems().addAll( Utills.FiltroDono.values() );
+
+        caixaSuspensaUnicoDono.setConverter(new StringConverter<Utills.FiltroDono>() {
+            @Override
+            public String toString(Utills.FiltroDono filtroDono) {
+                if( filtroDono == null ) return "";
+                if( filtroDono == Utills.FiltroDono.SIM ) return "Sim";
+                if( filtroDono == Utills.FiltroDono.NAO) return "Não";
+                return "Ambos";
+                /*Essas linhas acima é para exibir o texto que o utilizador vai clicar,
+                * para ele vai aparecer apenas "Sim", "Não" e "Ambos".
+                * Para o backend da aplicação vai ser o próprio filtro*/
+            }
+
+            @Override
+            public Utills.FiltroDono fromString(String s) {
+                return null;
+            }
+        });
         caixaSuspensaUnicoDono.getSelectionModel().selectFirst(); //Deixamos o primeiro selecionado por padrão
 
 
@@ -91,7 +112,7 @@ public class Pesquisar  {
             car = VeiculoController.buscarTodos( offSet );
 
         }else{
-            car = VeiculoController.buscarComFiltro(selecionado.getValue(), campoBusca.getText(), JavaFXUI.donoUnico( caixaSuspensaUnicoDono ), offSet );
+            car = VeiculoController.buscarComFiltro(selecionado.getValue(), campoBusca.getText(), caixaSuspensaUnicoDono.getValue(), offSet );
         }
 
         dadosTable.clear(  );
@@ -169,10 +190,10 @@ public class Pesquisar  {
 
             if( campoBusca.getText().isEmpty() ){
 
-                if( JavaFXUI.donoUnico( caixaSuspensaUnicoDono ) != null ) {
+                if( caixaSuspensaUnicoDono.getValue() != Utills.FiltroDono.AMBOS ) {
                     dadosTable.clear();
                     Pair<String, String> selecionado = caixaSuspensaFiltro.getValue();
-                    dadosTable.addAll(VeiculoController.buscarComFiltro( selecionado.getValue(), null, JavaFXUI.donoUnico( caixaSuspensaUnicoDono ), offSet) );
+                    dadosTable.addAll(VeiculoController.buscarComFiltro( selecionado.getValue(), null, caixaSuspensaUnicoDono.getValue(), offSet) );
                     return;
                 }else{
                     dadosTable.clear();
@@ -186,17 +207,10 @@ public class Pesquisar  {
             Pair<String, String> selecionado = caixaSuspensaFiltro.getValue();
             if ( selecionado != null ){
 
-                Boolean isUnico = JavaFXUI.donoUnico( caixaSuspensaUnicoDono );
-                //Acima optei pelo Boolean como não primitivo(Classe) devido opção a mais que ele me permite ter a mais, o null.
-                /*
-                isUnico pode ser 3 coisas agora:
-                1 - true - Sim
-                2 - false - Não
-                3 - null = Ambos
-                */
+
 
                 try {
-                    List<Veiculo> filtrados = VeiculoController.buscarComFiltro(selecionado.getValue(), campoBusca.getText(), isUnico, offSet);
+                    List<Veiculo> filtrados = VeiculoController.buscarComFiltro(selecionado.getValue(), campoBusca.getText(), caixaSuspensaUnicoDono.getValue(), offSet);
                     if( !filtrados.isEmpty()){
 
                         dadosTable.clear();
