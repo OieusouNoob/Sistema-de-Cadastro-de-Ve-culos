@@ -1,6 +1,5 @@
 package erik.veiculos.utills.javafxutils;
 
-import erik.veiculos.utills.Utills;
 
 import javafx.scene.control.Alert;
 
@@ -19,25 +18,25 @@ import java.util.Optional;
 
 public class JavaFXUI {
 
-    private JavaFXUI(){
+    private JavaFXUI() {
         throw new IllegalArgumentException("Esta classe não pode ser instânciada!");
     }
 
 
-    public static void Alertas(Alert.AlertType tipoDeAlert, String titulo, String conteudo ){
-        Alert alerta = new Alert( tipoDeAlert );
-        alerta.setTitle( titulo );
-        alerta.setContentText( conteudo );
-        alerta.setHeaderText( null );
+    public static void Alertas(Alert.AlertType tipoDeAlert, String titulo, String conteudo) {
+        Alert alerta = new Alert(tipoDeAlert);
+        alerta.setTitle(titulo);
+        alerta.setContentText(conteudo);
+        alerta.setHeaderText(null);
         alerta.showAndWait();
     }
 
-    public static boolean AlertaVazio(TextField... campos){
-        for(TextField i : campos)
+    public static boolean AlertaVazio(TextField... campos) {
+        for (TextField i : campos)
 
-            if( i.getText().isEmpty() ){
+            if (i.getText().isEmpty()) {
 
-                Alertas( Alert.AlertType.ERROR, "Campos Vazios", "Digite algo nos campos!" );
+                Alertas(Alert.AlertType.ERROR, "Campos Vazios", "Digite algo nos campos!");
                 return true;
 
             }
@@ -45,19 +44,19 @@ public class JavaFXUI {
         return false;
     }
 
-    public static boolean AlertaSimNao( String titulo, String conteudo ){
+    public static boolean AlertaSimNao(String titulo, String conteudo) {
 
-        Alert alerta = new Alert( Alert.AlertType.CONFIRMATION );
+        Alert alerta = new Alert(Alert.AlertType.CONFIRMATION);
 
         ButtonType btnSim = new ButtonType("Sim", ButtonBar.ButtonData.YES);
-        ButtonType btnNao = new ButtonType("Não", ButtonBar.ButtonData.NO );
+        ButtonType btnNao = new ButtonType("Não", ButtonBar.ButtonData.NO);
 
         alerta.getButtonTypes().clear();
-        alerta.getButtonTypes().addAll( btnNao, btnSim );
+        alerta.getButtonTypes().addAll(btnNao, btnSim);
 
-        alerta.setHeaderText( null );
-        alerta.setTitle( titulo );
-        alerta.setContentText( conteudo );
+        alerta.setHeaderText(null);
+        alerta.setTitle(titulo);
+        alerta.setContentText(conteudo);
 
         Optional<ButtonType> click = alerta.showAndWait();
 
@@ -65,19 +64,19 @@ public class JavaFXUI {
         return click.isPresent() && click.get() == btnSim;
     }
 
-    public static TextField criarCampos( String TextoFundo ){
-        if( TextoFundo.isEmpty( ) ) {
+    public static TextField criarCampos(String TextoFundo) {
+        if (TextoFundo.isEmpty()) {
             throw new IllegalArgumentException("Parâmetros inválidos!");
         }
 
-        TextField campo = new TextField( );
-        campo.setPromptText( TextoFundo );
-        campo.setMaxWidth( 200 );
+        TextField campo = new TextField();
+        campo.setPromptText(TextoFundo);
+        campo.setMaxWidth(200);
 
         return campo;
     }
 
-    public static void setlimitChars(TextField campo, int len){
+    public static void setlimitChars(TextField campo, int len) {
 
         if (campo == null || len <= 0) {
             throw new IllegalArgumentException("Valores inválidos!");
@@ -122,17 +121,5 @@ public class JavaFXUI {
         barraSuspensa.getSelectionModel().selectFirst();
 
         return barraSuspensa;
-    }
-
-    public static Integer donoUnico(ComboBox<String> caixaSuspensaUnicoDono ){
-
-        if( caixaSuspensaUnicoDono.getValue().equals("Sim") ){
-            return Utills.FiltroDono.SIM.ordinal();
-        }else if( caixaSuspensaUnicoDono.getValue().equals("Não")){
-            return Utills.FiltroDono.NAO.ordinal();
-        }
-
-        return Utills.FiltroDono.AMBOS.ordinal();
-
     }
 }
